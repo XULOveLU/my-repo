@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>登入注册页面</title>
+<style>
+    body {
+        
+        background-color: cyan;
+    }
+    form {
+        margin-top: 200px ;
+        margin-left: 500px;
+        padding: 40px;
+        border: 12px solid peachpuff;
+        width: 600px;
+        height: 300px;
+        background-color: white;
+    }
+    input[type="text"],
+    input[type="password"]
+     {
+        display: block;
+        margin: 10px 0;
+        padding: 5px;
+        width: 100%;
+    }
+    input[type="submit"]{
+        margin: 30px auto;
+        display: block;
+        width: 100px;
+        height: 30px;
+        border-radius: 20%;
+        background-color: chartreuse;
+    }
+    .bottom p{
+        margin:10px 750px;
+    }
+
+</style>
+</head>
+<body>
+    <div class="login">
+        <div class="top">
+            <form id="loginForm">
+                <h2>密码登入</h2>
+                <input type="text" id="loginUsername" placeholder="用户名" required>
+                <input type="password" id="loginPassword" placeholder="请输入密码" required>
+                <input type="submit" value="立即登入" >
+            </form>
+            <form id="registerForm" style="display:none;">
+                <h2>欢迎注册</h2>
+                <input type="text" id="registerUsername" placeholder="昵称" required>
+                <input type="password" id="registerPassword" placeholder="请设置密码" required>
+                <input type="submit" value="立即注册" >
+            </form>
+        </div>
+        <div class="bottom">
+            <p>注册页面 <a href="javascript:void(0);" onclick="showRegisterForm();">请注册</a>.</p>
+            <p>登入页面 <a href="javascript:void(0);" onclick="showLoginForm();">请登入</a>.</p>
+        </div>
+    </div>
+    
+   
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const registerForm = document.getElementById("registerForm");
+
+        // 尝试从本地存储中加载用户信息
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+
+        loginForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const username = document.getElementById("loginUsername").value;
+            const password = document.getElementById("loginPassword").value;
+            const user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                alert("恭喜你，登入成功");
+                console.log("Logged in as:", username);
+            } else {
+                alert("请输入有效的用户名和密码");
+            }
+            window.location.href ="./计算机学院官网/index.html";
+        
+        //判断非空
+        if((username==null || username=="")||(password==null || password=="")) {
+                alert("用户名或密码不能为空！");
+            }
+        } 
+        );
+
+        registerForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const username = document.getElementById("registerUsername").value;
+            const password = document.getElementById("registerPassword").value;
+            // 检查是否已经存在相同用户名的用户
+            const existingUser = users.find(u => u.username === username);
+            if (existingUser) {
+                alert("用户名已经存在，请输入不同的昵称");
+                return;
+            }
+            // 如果不存在相同用户名的用户，则注册成功
+            users.push({ username, password });
+            localStorage.setItem("users", JSON.stringify(users));
+            alert("恭喜你，注册成功");
+            showLoginForm();
+            console.log("name:"+username);
+            console.log("password:"+password);
+        });
+
+        // 切换到注册表单
+        function showRegisterForm() {
+            loginForm.style.display = "none";
+            registerForm.style.display = "block";
+        }
+
+        // 切换到登入表单
+        function showLoginForm() {
+            registerForm.style.display = "none";
+            loginForm.style.display = "block";
+        }
+    </script>
+   
+    
+</body>
+</html>
